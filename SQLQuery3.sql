@@ -18,12 +18,12 @@ FROM Project_Education..education_quality;
 	-- Ordering the economy table by GDP per capita and Average goverment expenditure in education:
 
 SELECT "Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita', 
-	"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu'
+		"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu'
 FROM economy
 ORDER BY GDP_per_capita DESC;
 
 SELECT "Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita', 
-	"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu'
+		"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu'
 FROM economy
 ORDER BY Avg_gov_exp_edu DESC;
 
@@ -32,25 +32,25 @@ ORDER BY Avg_gov_exp_edu DESC;
 	-- Finding any relations between GDP per capita and enrollment and completion of levels of education:
 
 SELECT economy."Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita', 
-	economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
-	education."Avg primary enrollment ratio (%)" AS 'primary_enrollment_%', 
-	education."Avg primary completion rate (%)" AS 'primary_completion_%'
+		economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
+		education."Avg primary enrollment ratio (%)" AS 'primary_enrollment_%', 
+		education."Avg primary completion rate (%)" AS 'primary_completion_%'
 FROM economy LEFT JOIN education
 	ON economy.Country = education.Country
 ORDER BY GDP_per_capita DESC;
 
 SELECT economy."Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita', 
-	economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
-	education."Avg secondary enrollment ratio (%)" As 'secondary_enrollment_%',
-	education."Avg secondary completion rate (%)" AS 'secondary_completion_%' 
+		economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
+		education."Avg secondary enrollment ratio (%)" As 'secondary_enrollment_%',
+		education."Avg secondary completion rate (%)" AS 'secondary_completion_%' 
 FROM economy LEFT JOIN education
 	ON economy.Country = education.Country
 ORDER BY GDP_per_capita DESC;
 
 SELECT economy."Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita', 
-	economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
-	education."Avg terciary enrollment ratio (%)" As 'terciary_enrollment_%', 
-	education."Avg terciary completion rate (%)" AS 'terciary_completion_%'
+		economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
+		education."Avg terciary enrollment ratio (%)" As 'terciary_enrollment_%', 
+		education."Avg terciary completion rate (%)" AS 'terciary_completion_%'
 FROM economy LEFT JOIN education
 	ON economy.Country = education.Country
 ORDER BY GDP_per_capita DESC;
@@ -60,13 +60,13 @@ ORDER BY GDP_per_capita DESC;
 	-- Calculating an avg of PISA performance:
 
 SELECT economy."Country", "GDP per capita 2020 (USD)" AS 'GDP_per_capita',
-	economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
-	education_quality."Avg PISA performance_reading" AS 'reading', 
-	education_quality."Avg PISA performance_mathematics" AS 'mathematics', 
-	education_quality."Avg PISA performance_science" AS 'science',
-	CAST((education_quality."Avg PISA performance_reading" + 
-	education_quality."Avg PISA performance_mathematics" + 
-	education_quality."Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA'
+		economy."Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
+		education_quality."Avg PISA performance_reading" AS 'reading', 
+		education_quality."Avg PISA performance_mathematics" AS 'mathematics', 
+		education_quality."Avg PISA performance_science" AS 'science',
+		CAST((education_quality."Avg PISA performance_reading" + 
+		education_quality."Avg PISA performance_mathematics" + 
+		education_quality."Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA'
 FROM economy LEFT JOIN education_quality
 	ON economy.Country = education_quality.Country
 WHERE education_quality.[Avg PISA performance_reading] IS NOT NULL
@@ -201,22 +201,28 @@ VALUES ('Saint Helena', 'Europe', 'Western Africa, Sub-Saharan Africa');
 
 	-- Now it is all set to start joining the tables:
 
+		-- GDP per capita by country
 SELECT population."Country", 
-	continents."Continent", "GDP per capita 2020 (USD)" AS 'GDP_per_capita'
+		continents."Continent", "GDP per capita 2020 (USD)" AS 'GDP_per_capita'
 FROM population LEFT JOIN continents
 		ON population.Country LIKE continents.country;
 
+		-- GDP per capita by continent
+
 SELECT continents.continent, 
-	CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_continent',
-	FORMAT(AVG("Avg Gov exp education % of GDP (last 20 years)"), 'N2') AS 'Avg_gov_exp_edu'
+		CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_continent',
+		FORMAT(AVG("Avg Gov exp education % of GDP (last 20 years)"), 'N2') AS 'Avg_gov_exp_edu'
 FROM economy LEFT JOIN continents
 		ON economy.Country = continents.country
 GROUP BY Continent
 ORDER BY AVG_GDP_continent DESC;
 
+
+		-- GDP per capita by subregion
+
 SELECT continents.subregion, 
-	CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_subregion',
-	FORMAT(AVG("Avg Gov exp education % of GDP (last 20 years)"), 'N2') AS 'Avg_gov_exp_edu'
+		CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_subregion',
+		FORMAT(AVG("Avg Gov exp education % of GDP (last 20 years)"), 'N2') AS 'Avg_gov_exp_edu'
 FROM economy LEFT JOIN continents
 		ON economy.Country = continents.country
 GROUP BY subregion
@@ -236,55 +242,55 @@ WHERE country = 'Channel Islands';
 	-- Let's start with enrollment and completion ratios of education levels by continent and subregion:
 
 SELECT education.Country, 
-	continents.continent, 
-	continents.subregion, 
-	education."Avg primary enrollment ratio (%)", education."Avg primary completion rate (%)"
+		continents.continent, 
+		continents.subregion, 
+		education."Avg primary enrollment ratio (%)", education."Avg primary completion rate (%)"
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country;
 
 SELECT continents.continent, 
-	FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'Avg_primary_enrollment_%', 
-	FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'Avg_primary_completion_%'
+		FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'Avg_primary_enrollment_%', 
+		FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'Avg_primary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY continent
 ORDER BY 'Avg_primary_completion_%' DESC;
 
 SELECT continents.continent, 
-	FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'Avg_secondary_enrollment_%', 
-	FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'Avg_secondary_completion_%'
+		FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'Avg_secondary_enrollment_%', 
+		FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'Avg_secondary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY continent
 ORDER BY 'Avg_secondary_completion_%' DESC;
 
 SELECT continents.continent, 
-	FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%', 
-	FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%'
+		FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%', 
+		FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY continent
 ORDER BY 'Avg_terciary_completion_%' DESC;
 
 SELECT continents.subregion, 
-	FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'Avg_primary_enrollment_%', 
-	FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'Avg_primary_completion_%'
+		FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'Avg_primary_enrollment_%', 
+		FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'Avg_primary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY subregion
 ORDER BY 'Avg_primary_completion_%' DESC;
 
 SELECT continents.subregion, 
-	FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'Avg_secondary_enrollment_%', 
-	FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'Avg_secondary_completion_%'
+		FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'Avg_secondary_enrollment_%', 
+		FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'Avg_secondary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY subregion
 ORDER BY 'Avg_secondary_completion_%' DESC;
 
 SELECT continents.subregion, 
-	FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%', 
-	FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%'
+		FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%', 
+		FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%'
 FROM education LEFT JOIN continents
 		ON education.Country = continents.country
 GROUP BY subregion
@@ -293,37 +299,45 @@ ORDER BY 'Avg_terciary_completion_%' DESC;
 
 	-- Now let's move on to quality of education according to PISA Test:
 
+		-- Average PISA score by country
+
 SELECT education_quality.Country, 
-	continents.continent, 
-	continents.subregion, 
-	education_quality."Avg PISA performance_reading" AS 'reading', 
-	education_quality."Avg PISA performance_mathematics" AS 'mathematics', 
-	education_quality."Avg PISA performance_science" AS 'science',
-	CAST((education_quality."Avg PISA performance_reading" + 
-	education_quality."Avg PISA performance_mathematics" + 
-	education_quality."Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA'
+		continents.continent, 
+		continents.subregion, 
+		education_quality."Avg PISA performance_reading" AS 'reading', 
+		education_quality."Avg PISA performance_mathematics" AS 'mathematics', 
+		education_quality."Avg PISA performance_science" AS 'science',
+		CAST((education_quality."Avg PISA performance_reading" + 
+		education_quality."Avg PISA performance_mathematics" + 
+		education_quality."Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA'
 FROM education_quality LEFT JOIN continents
 		ON education_quality.Country = continents.country
 WHERE education_quality."Avg PISA performance_reading" IS NOT NULL
 ORDER BY Avg_PISA DESC;
 
+
+		-- Average PISA score by continent
+
 SELECT continents.continent,
-	CAST(AVG(education_quality."Avg PISA performance_reading") AS int) AS 'Avg_reading',
-	CAST(AVG(education_quality."Avg PISA performance_mathematics") AS int) AS 'mathematics', 
-	CAST(AVG(education_quality."Avg PISA performance_science") AS int) AS 'science',
-	CAST(((AVG(education_quality."Avg PISA performance_reading") +
-		AVG(education_quality."Avg PISA performance_mathematics") +
-		AVG(education_quality."Avg PISA performance_science")) / 3) AS int) AS 'Avg_PISA_continent'
+		CAST(AVG(education_quality."Avg PISA performance_reading") AS int) AS 'Avg_reading',
+		CAST(AVG(education_quality."Avg PISA performance_mathematics") AS int) AS 'mathematics', 
+		CAST(AVG(education_quality."Avg PISA performance_science") AS int) AS 'science',
+		CAST(((AVG(education_quality."Avg PISA performance_reading") +
+				AVG(education_quality."Avg PISA performance_mathematics") +
+				AVG(education_quality."Avg PISA performance_science")) / 3) AS int) AS 'Avg_PISA_continent'
 FROM education_quality LEFT JOIN continents
 		ON education_quality.Country = continents.country
 GROUP BY continent
 ORDER BY 'Avg_PISA_continent' DESC;
 
+
+		-- Average PISA score by subregion
+
 SELECT continents.subregion,
-	CAST(AVG(education_quality."Avg PISA performance_reading") AS int) AS 'Avg_reading',
-	CAST(AVG(education_quality."Avg PISA performance_mathematics") AS int) AS 'mathematics', 
-	CAST(AVG(education_quality."Avg PISA performance_science") AS int) AS 'science',
-	CAST(((AVG(education_quality."Avg PISA performance_reading") +
+		CAST(AVG(education_quality."Avg PISA performance_reading") AS int) AS 'Avg_reading',
+		CAST(AVG(education_quality."Avg PISA performance_mathematics") AS int) AS 'mathematics', 
+		CAST(AVG(education_quality."Avg PISA performance_science") AS int) AS 'science',
+		CAST(((AVG(education_quality."Avg PISA performance_reading") +
 				AVG(education_quality."Avg PISA performance_mathematics") +
 				AVG(education_quality."Avg PISA performance_science")) / 3) AS int) AS 'Avg_PISA_subregion'
 FROM education_quality LEFT JOIN continents
@@ -332,21 +346,93 @@ GROUP BY subregion
 ORDER BY 'Avg_PISA_subregion' DESC;
 
 
-	-- Let's create some sumarize tables from previous queries results for analisys:
+	-- Let's create some sumarize tables from previus queries results for analisys:
+
+		-- By Country:
 
 SELECT economy.Country,
-	continents.continent, 
-	continents.subregion,
-	"GDP per capita 2020 (USD)" AS 'AVG_GDP',
-	"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
-	"Avg primary enrollment ratio (%)" AS 'primary_enrollment_%', 
-	"Avg primary completion rate (%)" AS 'primary_completion_%',
-	"Avg secondary enrollment ratio (%)" AS 'secondary enrollment',
-	"Avg secondary completion rate (%)" AS 'secondary_completion_%',
-	"Avg terciary enrollment ratio (%)" AS 'Avg_terciary_enrollment_%',
-	"Avg terciary completion rate (%)" AS 'Avg_terciary_completion_%'
+		continents.Continent, 
+		continents.Subregion,
+		"GDP per capita 2020 (USD)" AS 'AVG_GDP',
+		"Avg Gov exp education % of GDP (last 20 years)" AS 'Avg_gov_exp_edu',
+		"Avg primary enrollment ratio (%)" AS 'primary_enrollment_%', 
+		"Avg primary completion rate (%)" AS 'primary_completion_%',
+		"Avg secondary enrollment ratio (%)" AS 'secondary enrollment',
+		"Avg secondary completion rate (%)" AS 'secondary_completion_%',
+		"Avg terciary enrollment ratio (%)" AS 'Avg_terciary_enrollment_%',
+		"Avg terciary completion rate (%)" AS 'Avg_terciary_completion_%',
+		"Avg PISA performance_reading" AS 'PISA_reading',
+		"Avg PISA performance_mathematics" AS 'PISA_mathematics',
+		"Avg PISA performance_science" AS 'PISA_science',
+		CAST(("Avg PISA performance_reading" +
+		"Avg PISA performance_mathematics" +
+		"Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA'
 FROM economy LEFT JOIN continents
 		ON economy.Country = continents.country
 		LEFT JOIN education
-		ON economy.country = education.Country
+		ON economy.Country = education.Country
+		LEFT JOIN education_quality
+		ON economy.Country = education_quality.Country
 ORDER BY AVG_GDP DESC;
+
+		
+		-- By Subregion
+
+SELECT 	continents.Subregion,
+		continents.Continent, 
+		CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_subregion',
+		CAST(AVG("Avg Gov exp education % of GDP (last 20 years)") AS int) AS 'Avg_gov_exp_edu_subregion',
+		FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'primary_enrollment_%_subregion', 
+		FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'primary_completion_%_subregion',
+		FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'secondary enrollment_subregion',
+		FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'secondary_completion_%_subregion',
+		FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%_subregion',
+		FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%_subregion',
+		CAST(AVG("Avg PISA performance_reading") AS int) AS 'PISA_reading_subregion',
+		CAST(AVG("Avg PISA performance_mathematics") AS int) AS 'PISA_mathematics_subregion',
+		CAST(AVG("Avg PISA performance_science") AS int) AS 'PISA_science_subregion',
+		CAST(AVG("Avg PISA performance_reading" +
+		"Avg PISA performance_mathematics" +
+		"Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA_subregion'
+FROM continents LEFT JOIN economy
+		ON continents.country = economy.Country
+		LEFT JOIN education
+		ON continents.country = education.Country
+		LEFT JOIN education_quality
+		ON continents.country = education_quality.Country
+GROUP BY subregion,
+		continent
+ORDER BY AVG_GDP_subregion DESC;
+
+
+		-- By Continent
+
+SELECT 	continents.Continent, 
+		CAST(AVG("GDP per capita 2020 (USD)") AS int) AS 'AVG_GDP_continent',
+		CAST(AVG("Avg Gov exp education % of GDP (last 20 years)") AS int) AS 'Avg_gov_exp_edu_continent',
+		FORMAT(AVG("Avg primary enrollment ratio (%)"), 'N2') AS 'primary_enrollment_%_continent', 
+		FORMAT(AVG("Avg primary completion rate (%)"), 'N2') AS 'primary_completion_%_continent',
+		FORMAT(AVG("Avg secondary enrollment ratio (%)"), 'N2') AS 'secondary enrollment_continent',
+		FORMAT(AVG("Avg secondary completion rate (%)"), 'N2') AS 'secondary_completion_%_continent',
+		FORMAT(AVG("Avg terciary enrollment ratio (%)"), 'N2') AS 'Avg_terciary_enrollment_%_continent',
+		FORMAT(AVG("Avg terciary completion rate (%)"), 'N2') AS 'Avg_terciary_completion_%_continent',
+		CAST(AVG("Avg PISA performance_reading") AS int) AS 'PISA_reading_continent',
+		CAST(AVG("Avg PISA performance_mathematics") AS int) AS 'PISA_mathematics_continent',
+		CAST(AVG("Avg PISA performance_science") AS int) AS 'PISA_science_continent',
+		CAST(AVG("Avg PISA performance_reading" +
+		"Avg PISA performance_mathematics" +
+		"Avg PISA performance_science") / 3 AS int) AS 'Avg_PISA_continent'
+FROM continents LEFT JOIN economy
+		ON continents.country = economy.Country
+		LEFT JOIN education
+		ON continents.country = education.Country
+		LEFT JOIN education_quality
+		ON continents.country = education_quality.Country
+GROUP BY continent
+ORDER BY AVG_GDP_continent DESC;
+
+
+	-- These three sumarized tables are the ones that I am going to use to create the visualization and analysis
+
+	-- Follow the link: https://public.tableau.com/views/Eduacationintheworld/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link
+
